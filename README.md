@@ -16,6 +16,10 @@ Installation
 ============
 Replace your existing `Fit Image.jsx` with this one. In CS5, it is located in `\Presets\Scripts` within the Photoshop install directory.
 
+Known Bugs
+============
+Currently, the resampling method is not compatible with recorded actions in Photoshop (work in progress)
+
 Attribution
 ===========
 The attribution information for the original script is as follows:

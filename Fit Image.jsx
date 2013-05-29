@@ -1,4 +1,4 @@
-// Fit Image+
+﻿// Fit Image+
 // Modified by John Ballantyne
 // May 28, 2013
 // https://github.com/johnballantyne/FitImagePlus
@@ -12,31 +12,32 @@
 
 
 /*
-@@@BUILDINFO@@@ Fit Image.jsx 1.0.0.21
-*/
+ @@@BUILDINFO@@@ Fit Image.jsx 1.0.0.21
+ */
 
 
 /* Special properties for a JavaScript to enable it to behave like an automation plug-in, the variable name must be exactly
-   as the following example and the variables must be defined in the top 1000 characters of the file
+ as the following example and the variables must be defined in the top 1000 characters of the file
 
-// BEGIN__HARVEST_EXCEPTION_ZSTRING
-<javascriptresource>
-<name>$$$/JavaScripts/FitImage/Name=Fit Image+...</name>
-<menu>automate</menu>
-<enableinfo>true</enableinfo>
-<eventid>3caa3434-cb67-11d1-bc43-0060b0a13dc4</eventid>
-<terminology><![CDATA[<< /Version 1
-                         /Events <<
-                          /3caa3434-cb67-11d1-bc43-0060b0a13dc4 [($$$/AdobePlugin/FitImage/Name=Fit Image+) /imageReference <<
-	                       /width [($$$/AdobePlugin/FitImage/Width=width) /pixelsUnit]
-	                       /height [($$$/AdobePlugin/FitImage/Height=height) /pixelsUnit]
-	                       /limit [($$$/AdobePlugin/FitImage/limit=Don't Enlarge) /boolean]
-                          >>]
-                         >>
-                      >> ]]></terminology>
-</javascriptresource>
-// END__HARVEST_EXCEPTION_ZSTRING
-*/
+ // BEGIN__HARVEST_EXCEPTION_ZSTRING
+ <javascriptresource>
+ <name>$$$/JavaScripts/FitImage/Name=Fit Image+...</name>
+ <menu>automate</menu>
+ <enableinfo>true</enableinfo>
+ <eventid>3caa3434-cb67-11d1-bc43-0060b0a13dc4</eventid>
+ <terminology><![CDATA[<< /Version 1
+ /Events <<
+ /3caa3434-cb67-11d1-bc43-0060b0a13dc4 [($$$/AdobePlugin/FitImage/Name=Fit Image+) /imageReference <<
+ /width [($$$/AdobePlugin/FitImage/Width=width) /pixelsUnit]
+ /height [($$$/AdobePlugin/FitImage/Height=height) /pixelsUnit]
+ /limit [($$$/AdobePlugin/FitImage/limit=Don't Enlarge) /boolean]
+ /rmethod [($$$/AdobePlugin/FitImage/rmethod=Method) /string]
+ >>]
+ >>
+ >> ]]></terminology>
+ </javascriptresource>
+ // END__HARVEST_EXCEPTION_ZSTRING
+ */
 
 
 // enable double clicking from the Macintosh Finder or the Windows Explorer
@@ -55,26 +56,26 @@ var isCancelled = true; // assume cancelled until actual resize occurs
 // the FitImage object does most of the work
 try {
 
-	// create our default params
-	var sizeInfo = new SizeInfo();
+    // create our default params
+    var sizeInfo = new SizeInfo();
 
-	GlobalVariables();
-	CheckVersion();
+    GlobalVariables();
+    CheckVersion();
 
-	var gIP = new FitImage();
+    var gIP = new FitImage();
 
-	if ( DialogModes.ALL == app.playbackDisplayDialogs ) {
+    if ( DialogModes.ALL == app.playbackDisplayDialogs ) {
         gIP.CreateDialog();
         gIP.RunDialog();
-	}
-	else {
-		gIP.InitVariables();
-		ResizeTheImage(sizeInfo.width.value, sizeInfo.height.value, ResampleMethod.BICUBIC);
-	}
+    }
+    else {
+        gIP.InitVariables();
+        ResizeTheImage(sizeInfo.width.value, sizeInfo.height.value, ResampleMethod.BICUBIC);
+    }
 
-	if (!isCancelled) {
-		SaveOffParameters(sizeInfo);
-	}
+    if (!isCancelled) {
+        SaveOffParameters(sizeInfo);
+    }
 
 }
 
@@ -82,9 +83,9 @@ try {
 // Lot's of things can go wrong
 // Give a generic alert and see if they want the details
 catch( e ) {
-	if ( DialogModes.NO != app.playbackDisplayDialogs ) {
-		alert( e + " : " + e.line );
-	}
+    if ( DialogModes.NO != app.playbackDisplayDialogs ) {
+        alert( e + " : " + e.line );
+    }
 }
 
 
@@ -100,109 +101,109 @@ isCancelled ? 'cancel' : undefined;
 //////////////////////////////////////////////////////////////
 
 function ResizeTheImage(width, height, method) {
-	var oldPref = app.preferences.rulerUnits;
-	var docWidth;
-	var docHeight;
-	var docRatio;
-	var newWidth;
-	var newHeight;
-	var resolution = app.activeDocument.resolution;
-	var limit = sizeInfo.limit;
+    var oldPref = app.preferences.rulerUnits;
+    var docWidth;
+    var docHeight;
+    var docRatio;
+    var newWidth;
+    var newHeight;
+    var resolution = app.activeDocument.resolution;
+    var limit = sizeInfo.limit;
 
     app.preferences.rulerUnits = Units.PIXELS; // save old preferences
 
-	// original width, height
-	docWidth = (1.0 * app.activeDocument.width * resolution) / 72.0; // decimal inches assuming 72 dpi (used in docRatio)
-	docHeight = (1.0 * app.activeDocument.height * resolution) / 72.0; // ditto
+    // original width, height
+    docWidth = (1.0 * app.activeDocument.width * resolution) / 72.0; // decimal inches assuming 72 dpi (used in docRatio)
+    docHeight = (1.0 * app.activeDocument.height * resolution) / 72.0; // ditto
 
-	if (docWidth < 1.0 || docHeight < 1.0)
-		return true; // error
+    if (docWidth < 1.0 || docHeight < 1.0)
+        return true; // error
 
-	if (width < 1 || height < 1)
-		return true; // error
+    if (width < 1 || height < 1)
+        return true; // error
 
-	if ( limit && ( docWidth <= width && docHeight <= height ) ){
-		app.preferences.rulerUnits = oldPref; // restore old prefs
-		isCancelled = false; // if get here, definitely executed
-		return false; // no error
-	}
+    if ( limit && ( docWidth <= width && docHeight <= height ) ){
+        app.preferences.rulerUnits = oldPref; // restore old prefs
+        isCancelled = false; // if get here, definitely executed
+        return false; // no error
+    }
 
-	docRatio = docWidth / docHeight; // decimal ratio of original width/height
+    docRatio = docWidth / docHeight; // decimal ratio of original width/height
 
-	newWidth = width;
-	newHeight = ((1.0 * width) / docRatio); // decimal calc
+    newWidth = width;
+    newHeight = ((1.0 * width) / docRatio); // decimal calc
 
-	if (newHeight > height) {
-		newWidth = docRatio * height; // decimal calc
-		newHeight = height;
-	}
+    if (newHeight > height) {
+        newWidth = docRatio * height; // decimal calc
+        newHeight = height;
+    }
 
     // resize the image using a good conversion method while keeping the pixel resolution
     // and the aspect ratio the same
     app.activeDocument.resizeImage(newWidth, newHeight, resolution, method);
     app.preferences.rulerUnits = oldPref; // restore old prefs
-	isCancelled = false; // if get here, definitely executed
-	return false; // no error
+    isCancelled = false; // if get here, definitely executed
+    return false; // no error
 }
 
 
 // created in
 function SaveOffParameters(sizeInfo) {
 
-	// save off our last run parameters
-	var d = objectToDescriptor(sizeInfo, strMessage);
-	app.putCustomOptions("3caa3434-cb67-11d1-bc43-0060b0a13dc4", d);
-	app.playbackDisplayDialogs = DialogModes.ALL;
+    // save off our last run parameters
+    var d = objectToDescriptor(sizeInfo, strMessage);
+    app.putCustomOptions("3caa3434-cb67-11d1-bc43-0060b0a13dc4", d);
+    app.playbackDisplayDialogs = DialogModes.ALL;
 
-	// save off another copy so Photoshop can track them corectly
-	var dd = objectToDescriptor(sizeInfo, strMessage);
-	app.playbackParameters = dd;
+    // save off another copy so Photoshop can track them corectly
+    var dd = objectToDescriptor(sizeInfo, strMessage);
+    app.playbackParameters = dd;
 }
 
 function GlobalVariables() {
 
-	// a version for possible expansion issues
-	gVersion = 1.1;
+    // a version for possible expansion issues
+    gVersion = 1.1;
 
-	gMaxResize = 300000;
+    gMaxResize = 300000;
 
-	// remember the dialog modes
-	gSaveDialogMode = app.displayDialogs;
-	app.displayDialogs = DialogModes.NO;
+    // remember the dialog modes
+    gSaveDialogMode = app.displayDialogs;
+    app.displayDialogs = DialogModes.NO;
     gInAlert = false;
 
-	// all the strings that need to be localized
-	strTitle = localize( "$$$/JavaScript/FitImage/Title=Fit Image" );
-	strConstrainWithin = localize( "$$$/JavaScript/FitImage/ConstrainWithin=Constrain Within" );
-	strTextWidth = localize("$$$/JavaScripts/FitImage/Width=&Width:");
-	strTextHeight = localize("$$$/JavaScripts/FitImage/Height=&Height:");
-	strTextMethod = localize("$$$/JavaScripts/FitImage/Method=Method:");
-	strTextPixels = localize("$$$/JavaScripts/FitImage/Pixels=pixels");
-	strButtonOK = localize("$$$/JavaScripts/FitImage/OK=OK");
-	strButtonCancel = localize("$$$/JavaScripts/FitImage/Cancel=Cancel");
-	strTextSorry = localize("$$$/JavaScripts/FitImage/Sorry=Sorry, Dialog failed");
-	strTextInvalidType = localize("$$$/JavaScripts/FitImage/InvalidType=Invalid numeric value");
-	strTextInvalidNum = localize("$$$/JavaScripts/FitImage/InvalidNum=A number between 1 and 300000 is required. Closest value inserted.");
-	strTextNeedFile = localize("$$$/JavaScripts/FitImage/NeedFile=You must have a file selected before using Fit Image");
-	strMessage = localize("$$$/JavaScripts/FitImage/Message=Fit Image action settings");
-	strMustUse = localize( "$$$/JavaScripts/ImageProcessor/MustUse=You must use Photoshop CS 2 or later to run this script!" );
-	strLimitResize = localize("$$$/JavaScripts/FitImage/Limit=Don^}t Enlarge");
+    // all the strings that need to be localized
+    strTitle = localize( "$$$/JavaScript/FitImage/Title=Fit Image" );
+    strConstrainWithin = localize( "$$$/JavaScript/FitImage/ConstrainWithin=Constrain Within" );
+    strTextWidth = localize("$$$/JavaScripts/FitImage/Width=&Width:");
+    strTextHeight = localize("$$$/JavaScripts/FitImage/Height=&Height:");
+    strTextMethod = localize("$$$/JavaScripts/FitImage/Method=Method:");
+    strTextPixels = localize("$$$/JavaScripts/FitImage/Pixels=pixels");
+    strButtonOK = localize("$$$/JavaScripts/FitImage/OK=OK");
+    strButtonCancel = localize("$$$/JavaScripts/FitImage/Cancel=Cancel");
+    strTextSorry = localize("$$$/JavaScripts/FitImage/Sorry=Sorry, Dialog failed");
+    strTextInvalidType = localize("$$$/JavaScripts/FitImage/InvalidType=Invalid numeric value");
+    strTextInvalidNum = localize("$$$/JavaScripts/FitImage/InvalidNum=A number between 1 and 300000 is required. Closest value inserted.");
+    strTextNeedFile = localize("$$$/JavaScripts/FitImage/NeedFile=You must have a file selected before using Fit Image");
+    strMessage = localize("$$$/JavaScripts/FitImage/Message=Fit Image action settings");
+    strMustUse = localize( "$$$/JavaScripts/ImageProcessor/MustUse=You must use Photoshop CS 2 or later to run this script!" );
+    strLimitResize = localize("$$$/JavaScripts/FitImage/Limit=Don^}t Enlarge");
 }
 
 // the main class
 function FitImage() {
 
-	this.CreateDialog = function() {
+    this.CreateDialog = function() {
 
-		// I will keep most of the important dialog items at the same level
-		// and use auto layout
-		// use overriding group so OK/Cancel buttons placed to right of panel
+        // I will keep most of the important dialog items at the same level
+        // and use auto layout
+        // use overriding group so OK/Cancel buttons placed to right of panel
 
-		var res =
-			"dialog { \
-				pAndB: Group { orientation: 'row', \
-					info: Panel { orientation: 'column', borderStyle: 'sunken', \
-						text: '" + strConstrainWithin +"', \
+        var res =
+            "dialog { \
+                pAndB: Group { orientation: 'row', \
+                    info: Panel { orientation: 'column', borderStyle: 'sunken', \
+                        text: '" + strConstrainWithin +"', \
 						w: Group { orientation: 'row', alignment: 'right',\
 							s: StaticText { text:'" + strTextWidth +"' }, \
 							e: EditText { preferredSize: [70, 20] }, \
@@ -228,110 +229,110 @@ function FitImage() {
 				} \
 			}";
 
-		// the following, when placed after e: in w and h doesn't show up
-		// this seems to be OK since px is put inside the dialog box
-		//p: StaticText { text:'" + strTextPixels + "'}
+        // the following, when placed after e: in w and h doesn't show up
+        // this seems to be OK since px is put inside the dialog box
+        //p: StaticText { text:'" + strTextPixels + "'}
 
-		// create the main dialog window, this holds all our data
-		this.dlgMain = new Window(res,strTitle);
+        // create the main dialog window, this holds all our data
+        this.dlgMain = new Window(res,strTitle);
 
-		// create a shortcut for easier typing
-		var d = this.dlgMain;
+        // create a shortcut for easier typing
+        var d = this.dlgMain;
 
-	    // match our dialog background color to the host application
-        //CS5+? Thanks @joonaspaakko       
-		if (CS5orGreater())
-			d.graphics.backgroundColor = d.graphics.newBrush (d.graphics.BrushType.THEME_COLOR, "appDialogBackground");
+        // match our dialog background color to the host application
+        //CS5+? Thanks @joonaspaakko
+        if (CS5orGreater())
+            d.graphics.backgroundColor = d.graphics.newBrush (d.graphics.BrushType.THEME_COLOR, "appDialogBackground");
 
-		d.defaultElement = d.pAndB.buttons.okBtn;
-		d.cancelElement = d.pAndB.buttons.cancelBtn;
-	} // end of CreateDialog
+        d.defaultElement = d.pAndB.buttons.okBtn;
+        d.cancelElement = d.pAndB.buttons.cancelBtn;
+    } // end of CreateDialog
 
-	// initialize variables of dialog
-	this.InitVariables = function() {
+    // initialize variables of dialog
+    this.InitVariables = function() {
 
-		var oldPref = app.preferences.rulerUnits;
-		app.preferences.rulerUnits = Units.PIXELS;
+        var oldPref = app.preferences.rulerUnits;
+        app.preferences.rulerUnits = Units.PIXELS;
 
-		// look for last used params via Photoshop registry, getCustomOptions will throw if none exist
-		try {
-			var desc = app.getCustomOptions("3caa3434-cb67-11d1-bc43-0060b0a13dc4");
-			descriptorToObject(sizeInfo, desc, strMessage);
-		}
+        // look for last used params via Photoshop registry, getCustomOptions will throw if none exist
+        try {
+            var desc = app.getCustomOptions("3caa3434-cb67-11d1-bc43-0060b0a13dc4");
+            descriptorToObject(sizeInfo, desc, strMessage);
+        }
 
-		catch(e) {
-			// it's ok if we don't have any options, continue with defaults
-		}
+        catch(e) {
+            // it's ok if we don't have any options, continue with defaults
+        }
 
-		// see if I am getting descriptor parameters
-		var fromAction = !!app.playbackParameters.count;
-		if( fromAction ){
-			// reset sizeInfo to defaults
-			SizeInfo = new SizeInfo();
-			// set the playback options to sizeInfo
-			descriptorToObject(sizeInfo, app.playbackParameters, strMessage);
-		}
+        // see if I am getting descriptor parameters
+        var fromAction = !!app.playbackParameters.count;
+        if( fromAction ){
+            // reset sizeInfo to defaults
+            SizeInfo = new SizeInfo();
+            // set the playback options to sizeInfo
+            descriptorToObject(sizeInfo, app.playbackParameters, strMessage);
+        }
 
-		// make sure got parameters before this
-		if (app.documents.length <= 0) // count of documents viewed
-		{
-			if ( DialogModes.NO != app.playbackDisplayDialogs ) {
-				alert(strTextNeedFile); // only put up dialog if permitted
-			}
-			app.preferences.rulerUnits = oldPref;
-			return false; // if no docs, always return
-		}
+        // make sure got parameters before this
+        if (app.documents.length <= 0) // count of documents viewed
+        {
+            if ( DialogModes.NO != app.playbackDisplayDialogs ) {
+                alert(strTextNeedFile); // only put up dialog if permitted
+            }
+            app.preferences.rulerUnits = oldPref;
+            return false; // if no docs, always return
+        }
 
-		var w = app.activeDocument.width;
-		var h = app.activeDocument.height;
-		var l = true;
-		if (sizeInfo.width.value == 0) {
-			sizeInfo.width = w;
-		}
-		else {
-			w = sizeInfo.width;
-		}
-		if (sizeInfo.height.value == 0) {
-			sizeInfo.height = h;
-		}
-		else {
-			h = sizeInfo.height;
-		}
+        var w = app.activeDocument.width;
+        var h = app.activeDocument.height;
+        var l = true;
+        if (sizeInfo.width.value == 0) {
+            sizeInfo.width = w;
+        }
+        else {
+            w = sizeInfo.width;
+        }
+        if (sizeInfo.height.value == 0) {
+            sizeInfo.height = h;
+        }
+        else {
+            h = sizeInfo.height;
+        }
 
-		app.preferences.rulerUnits = oldPref;
-		if ( DialogModes.ALL == app.playbackDisplayDialogs ) {
-			var d = this.dlgMain;
-			d.ip = this;
-			d.pAndB.info.w.e.text = Number(w);
-			d.pAndB.info.h.e.text = Number(h);
-			d.pAndB.info.l.c.value = sizeInfo.limit;
-			d.pAndB.info.r.e.selection = d.pAndB.info.r.e.items[0] ;
-		}
-		return true;
-	}
+        app.preferences.rulerUnits = oldPref;
+        if ( DialogModes.ALL == app.playbackDisplayDialogs ) {
+            var d = this.dlgMain;
+            d.ip = this;
+            d.pAndB.info.w.e.text = Number(w);
+            d.pAndB.info.h.e.text = Number(h);
+            d.pAndB.info.l.c.value = sizeInfo.limit;
+            d.pAndB.info.r.e.selection = d.pAndB.info.r.e.items[0] ;
+        }
+        return true;
+    }
 
-	// routine for running the dialog and it's interactions
-	this.RunDialog = function () {
-		var d = this.dlgMain;
+    // routine for running the dialog and it's interactions
+    this.RunDialog = function () {
+        var d = this.dlgMain;
 
-		// in case hit cancel button, don't close
-		d.pAndB.buttons.cancelBtn.onClick = function() {
-			var dToCancel = FindDialog( this );
-			dToCancel.close( false );
-		}
+        // in case hit cancel button, don't close
+        d.pAndB.buttons.cancelBtn.onClick = function() {
+            var dToCancel = FindDialog( this );
+            dToCancel.close( false );
+        }
 
-		// nothing for now
-		d.onShow = function() {
-		}
+        // nothing for now
+        d.onShow = function() {
+        }
 
-		// do not allow anything except for numbers 0-9
-		d.pAndB.info.w.e.addEventListener ('keydown', NumericEditKeyboardHandler);
+        // do not allow anything except for numbers 0-9
+        d.pAndB.info.w.e.addEventListener ('keydown', NumericEditKeyboardHandler);
 
-		// do not allow anything except for numbers 0-9
-		d.pAndB.info.h.e.addEventListener ('keydown', NumericEditKeyboardHandler);
+        // do not allow anything except for numbers 0-9
+        d.pAndB.info.h.e.addEventListener ('keydown', NumericEditKeyboardHandler);
 
-		// hit OK, do resize
-		d.pAndB.buttons.okBtn.onClick = function () {
+        // hit OK, do resize
+        d.pAndB.buttons.okBtn.onClick = function () {
             if (gInAlert == true) {
                 gInAlert = false;
                 return;
@@ -340,24 +341,25 @@ function FitImage() {
             var wText = d.pAndB.info.w.e.text;
             var hText = d.pAndB.info.h.e.text;
             var lValue = d.pAndB.info.l.c.value;
+            var rValue = d.pAndB.info.r.e.selection;
             var w = Number(wText);
             var h = Number(hText);
             sizeInfo.limit = Boolean(lValue);
+            sizeInfo.rmethod = rValue.toString();
             var inputErr = false;
-			
-			var rValue = d.pAndB.info.r.e.selection;
-			var r = null;
-			
-			if (rValue.toString() === "Bicubic Sharper")
-				r = ResampleMethod.BICUBICSHARPER;
-			else if (rValue.toString() === "Bicubic Smoother")
-				r = ResampleMethod.BICUBICSMOOTHER;
-			else if (rValue.toString() === "Bilinear")
-				r = ResampleMethod.BILINEAR;
-			else if (rValue.toString() === "Nearest Neighbor")
-				r = ResampleMethod.NEARESTNEIGHBOR;
-			else
-				r = ResampleMethod.BICUBIC;
+
+            var r = null;
+
+            if (rValue.toString() === "Bicubic Sharper")
+                r = ResampleMethod.BICUBICSHARPER;
+            else if (rValue.toString() === "Bicubic Smoother")
+                r = ResampleMethod.BICUBICSMOOTHER;
+            else if (rValue.toString() === "Bilinear")
+                r = ResampleMethod.BILINEAR;
+            else if (rValue.toString() === "Nearest Neighbor")
+                r = ResampleMethod.NEARESTNEIGHBOR;
+            else
+                r = ResampleMethod.BICUBIC;
 
             if ( isNaN( w ) || isNaN( h ) ) {
                 if ( DialogModes.NO != app.playbackDisplayDialogs ) {
@@ -370,7 +372,7 @@ function FitImage() {
                     sizeInfo.height = new UnitValue( 1, "px" );
                     d.pAndB.info.h.e.text = 1;
                 }
-                    return false;
+                return false;
             }
             else if (w < 1 || w > gMaxResize || h < 1 || h > gMaxResize) {
                 if ( DialogModes.NO != app.playbackDisplayDialogs ) {
@@ -380,28 +382,28 @@ function FitImage() {
             }
 
             if ( w < 1) {
-				inputErr = true;
-				sizeInfo.width = new UnitValue( 1, "px" );
-				d.pAndB.info.w.e.text = 1;
-			}
+                inputErr = true;
+                sizeInfo.width = new UnitValue( 1, "px" );
+                d.pAndB.info.w.e.text = 1;
+            }
 
 
             if ( w > gMaxResize) {
-				inputErr = true;
-				sizeInfo.width = new UnitValue( gMaxResize, "px" );
-				d.pAndB.info.w.e.text = gMaxResize;
+                inputErr = true;
+                sizeInfo.width = new UnitValue( gMaxResize, "px" );
+                d.pAndB.info.w.e.text = gMaxResize;
             }
 
             if ( h < 1) {
-				inputErr = true;
-				sizeInfo.height = new UnitValue( 1, "px" );
-				d.pAndB.info.h.e.text = 1;
+                inputErr = true;
+                sizeInfo.height = new UnitValue( 1, "px" );
+                d.pAndB.info.h.e.text = 1;
             }
 
             if ( h > gMaxResize) {
-				inputErr = true;
-				sizeInfo.height = new UnitValue( gMaxResize, "px" );
-				d.pAndB.info.h.e.text = gMaxResize;
+                inputErr = true;
+                sizeInfo.height = new UnitValue( gMaxResize, "px" );
+                d.pAndB.info.h.e.text = gMaxResize;
             }
 
             if (inputErr == false)  {
@@ -412,50 +414,50 @@ function FitImage() {
                 }
                 d.close(true);
             }
-			return;
-		}
+            return;
+        }
 
-		if (!this.InitVariables())
-		{
-			return true; // handled it
-		}
+        if (!this.InitVariables())
+        {
+            return true; // handled it
+        }
 
-		// give the hosting app the focus before showing the dialog
-		app.bringToFront();
-		this.dlgMain.center();
+        // give the hosting app the focus before showing the dialog
+        app.bringToFront();
+        this.dlgMain.center();
 
-		return d.show();
-	}
+        return d.show();
+    }
 }
 
 
 function CS5orGreater() {
-	var numberArray = version.split(".");
-	if ( numberArray[0] >= 12 )
+    var numberArray = version.split(".");
+    if ( numberArray[0] >= 12 )
         return true;
     return false;
 }
 
 function CheckVersion() {
-	var numberArray = version.split(".");
-	if ( numberArray[0] < 9 ) {
-		if ( DialogModes.NO != app.playbackDisplayDialogs ) {
-			alert( strMustUse );
-		}
-		throw( strMustUse );
-	}
+    var numberArray = version.split(".");
+    if ( numberArray[0] < 9 ) {
+        if ( DialogModes.NO != app.playbackDisplayDialogs ) {
+            alert( strMustUse );
+        }
+        throw( strMustUse );
+    }
 }
 
 function FindDialog( inItem ) {
-	var w = inItem;
-	while ( 'dialog' != w.type ) {
-		if ( undefined == w.parent ) {
-			w = null;
-			break;
-		}
-		w = w.parent;
-	}
-	return w;
+    var w = inItem;
+    while ( 'dialog' != w.type ) {
+        if ( undefined == w.parent ) {
+            w = null;
+            break;
+        }
+        w = w.parent;
+    }
+    return w;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -472,42 +474,42 @@ function FindDialog( inItem ) {
 //        scripts self contained.
 ///////////////////////////////////////////////////////////////////////////////
 function objectToDescriptor (o, s, f) {
-	if (undefined != f) {
-		o = f(o);
-	}
+    if (undefined != f) {
+        o = f(o);
+    }
 
-	var d = new ActionDescriptor;
-	var l = o.reflect.properties.length;
-	d.putString( app.charIDToTypeID( 'Msge' ), s );
-	for (var i = 0; i < l; i++ ) {
-		var k = o.reflect.properties[i].toString();
-		if (k == "__proto__" || k == "__count__" || k == "__class__" || k == "reflect")
-			continue;
-		var v = o[ k ];
-		k = app.stringIDToTypeID(k);
-		switch ( typeof(v) ) {
-			case "boolean":
-				d.putBoolean(k, v);
-				break;
-			case "string":
-				d.putString(k, v);
-				break;
-			case "number":
-				d.putDouble(k, v);
-				break;
-			default:
-			{
-				if ( v instanceof UnitValue ) {
-					var uc = new Object;
-					uc["px"] = charIDToTypeID("#Pxl"); // pixelsUnit
-					uc["%"] = charIDToTypeID("#Prc"); // unitPercent
-					d.putUnitDouble(k, uc[v.type], v.value);
-				} else {
-					throw( new Error("Unsupported type in objectToDescriptor " + typeof(v) ) );
-				}
-			}
-		}
-	}
+    var d = new ActionDescriptor;
+    var l = o.reflect.properties.length;
+    d.putString( app.charIDToTypeID( 'Msge' ), s );
+    for (var i = 0; i < l; i++ ) {
+        var k = o.reflect.properties[i].toString();
+        if (k == "__proto__" || k == "__count__" || k == "__class__" || k == "reflect")
+            continue;
+        var v = o[ k ];
+        k = app.stringIDToTypeID(k);
+        switch ( typeof(v) ) {
+            case "boolean":
+                d.putBoolean(k, v);
+                break;
+            case "string":
+                d.putString(k, v);
+                break;
+            case "number":
+                d.putDouble(k, v);
+                break;
+            default:
+            {
+                if ( v instanceof UnitValue ) {
+                    var uc = new Object;
+                    uc["px"] = charIDToTypeID("#Pxl"); // pixelsUnit
+                    uc["%"] = charIDToTypeID("#Prc"); // unitPercent
+                    d.putUnitDouble(k, uc[v.type], v.value);
+                } else {
+                    throw( new Error("Unsupported type in objectToDescriptor " + typeof(v) ) );
+                }
+            }
+        }
+    }
     return d;
 }
 
@@ -527,51 +529,51 @@ function objectToDescriptor (o, s, f) {
 ///////////////////////////////////////////////////////////////////////////////
 
 function descriptorToObject (o, d, s, f) {
-	var l = d.count;
-	if (l) {
-	    var keyMessage = app.charIDToTypeID( 'Msge' );
+    var l = d.count;
+    if (l) {
+        var keyMessage = app.charIDToTypeID( 'Msge' );
         if ( d.hasKey(keyMessage) && ( s != d.getString(keyMessage) )) return;
-	}
-	for (var i = 0; i < l; i++ ) {
-		var k = d.getKey(i); // i + 1 ?
-		var t = d.getType(k);
-		strk = app.typeIDToStringID(k);
-		switch (t) {
-			case DescValueType.BOOLEANTYPE:
-				o[strk] = d.getBoolean(k);
-				break;
-			case DescValueType.STRINGTYPE:
-				o[strk] = d.getString(k);
-				break;
-			case DescValueType.DOUBLETYPE:
-				o[strk] = d.getDouble(k);
-				break;
-			case DescValueType.UNITDOUBLE:
-				{
-				var uc = new Object;
-				uc[charIDToTypeID("#Rlt")] = "px"; // unitDistance
-				uc[charIDToTypeID("#Prc")] = "%"; // unitPercent
-				uc[charIDToTypeID("#Pxl")] = "px"; // unitPixels
-				var ut = d.getUnitDoubleType(k);
-				var uv = d.getUnitDoubleValue(k);
-				o[strk] = new UnitValue( uv, uc[ut] );
-				}
-				break;
-			case DescValueType.INTEGERTYPE:
-			case DescValueType.ALIASTYPE:
-			case DescValueType.CLASSTYPE:
-			case DescValueType.ENUMERATEDTYPE:
-			case DescValueType.LISTTYPE:
-			case DescValueType.OBJECTTYPE:
-			case DescValueType.RAWTYPE:
-			case DescValueType.REFERENCETYPE:
-			default:
-				throw( new Error("Unsupported type in descriptorToObject " + t ) );
-		}
-	}
-	if (undefined != f) {
-		o = f(o);
-	}
+    }
+    for (var i = 0; i < l; i++ ) {
+        var k = d.getKey(i); // i + 1 ?
+        var t = d.getType(k);
+        strk = app.typeIDToStringID(k);
+        switch (t) {
+            case DescValueType.BOOLEANTYPE:
+                o[strk] = d.getBoolean(k);
+                break;
+            case DescValueType.STRINGTYPE:
+                o[strk] = d.getString(k);
+                break;
+            case DescValueType.DOUBLETYPE:
+                o[strk] = d.getDouble(k);
+                break;
+            case DescValueType.UNITDOUBLE:
+            {
+                var uc = new Object;
+                uc[charIDToTypeID("#Rlt")] = "px"; // unitDistance
+                uc[charIDToTypeID("#Prc")] = "%"; // unitPercent
+                uc[charIDToTypeID("#Pxl")] = "px"; // unitPixels
+                var ut = d.getUnitDoubleType(k);
+                var uv = d.getUnitDoubleValue(k);
+                o[strk] = new UnitValue( uv, uc[ut] );
+            }
+                break;
+            case DescValueType.INTEGERTYPE:
+            case DescValueType.ALIASTYPE:
+            case DescValueType.CLASSTYPE:
+            case DescValueType.ENUMERATEDTYPE:
+            case DescValueType.LISTTYPE:
+            case DescValueType.OBJECTTYPE:
+            case DescValueType.RAWTYPE:
+            case DescValueType.REFERENCETYPE:
+            default:
+                throw( new Error("Unsupported type in descriptorToObject " + t ) );
+        }
+    }
+    if (undefined != f) {
+        o = f(o);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -584,6 +586,7 @@ function SizeInfo() {
     this.height = new UnitValue( 0, "px" );
     this.width = new UnitValue( 0, "px" );
     this.limit = false;
+    this.rmethod = "Test";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -597,9 +600,9 @@ function NumericEditKeyboardHandler (event) {
     try {
 
         var keyIsOK = KeyIsNumeric (event) ||
-					  KeyIsDelete (event) ||
-					  KeyIsLRArrow (event) ||
-					  KeyIsTabEnterEscape (event);
+            KeyIsDelete (event) ||
+            KeyIsLRArrow (event) ||
+            KeyIsTabEnterEscape (event);
 
 
 
@@ -608,10 +611,10 @@ function NumericEditKeyboardHandler (event) {
             event.preventDefault();
 
             /*    Notify user of invalid input: make sure NOT
-			       to put up an alert dialog or do anything which
-		                 requires user interaction, because that
-		                 interferes with preventing the 'default'
-		                 action for the keydown event */
+             to put up an alert dialog or do anything which
+             requires user interaction, because that
+             interferes with preventing the 'default'
+             action for the keydown event */
             app.beep();
         }
     }
@@ -639,6 +642,6 @@ function KeyIsLRArrow (event) {
 }
 
 function KeyIsTabEnterEscape (event) {
-	return event.keyName == 'Tab' || event.keyName == 'Enter' || event.keyName == 'Escape';
+    return event.keyName == 'Tab' || event.keyName == 'Enter' || event.keyName == 'Escape';
 }
 // End Fit Image.jsx
