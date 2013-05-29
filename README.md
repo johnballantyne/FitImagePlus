@@ -3,7 +3,7 @@ Fit Image+
 
 A modified version of the Photoshop Fit Image script to allow selection of a re-sampling method
 
-This just adds a drop down box to the existing script so that you can select which re-sampling method to use. More info [here](http://graphicdesign.stackexchange.com/q/18358/8708)
+This just adds a drop down box to the existing script so that you can select which re-sampling method to use. More info [here](http://graphicdesign.stackexchange.com/q/18358/8708). Compatible with CS3 and up.
 
 ###Old 'n' Busted:
 ![Fit Image](http://i.stack.imgur.com/0v9ub.png)
