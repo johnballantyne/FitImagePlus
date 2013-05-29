@@ -9,7 +9,7 @@ This just adds a drop down box to the existing script so that you can select whi
 ![Fit Image](http://i.stack.imgur.com/0v9ub.png)
 
 ###New Hotness:
-![Fit Image+](http://i.stack.imgur.com/DeFVa.png)
+![Fit Image+](http://i.stack.imgur.com/Ak0w7.png)
 
 
 Installation
