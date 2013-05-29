@@ -239,7 +239,10 @@ function FitImage() {
 		var d = this.dlgMain;
 
 	    // match our dialog background color to the host application
-        d.graphics.backgroundColor = d.graphics.newBrush (d.graphics.BrushType.THEME_COLOR, "appDialogBackground");
+        //CS5+? Thanks @joonaspaakko       
+		if (CS5orGreater())
+			d.graphics.backgroundColor = d.graphics.newBrush (d.graphics.BrushType.THEME_COLOR, "appDialogBackground");
+
 		d.defaultElement = d.pAndB.buttons.okBtn;
 		d.cancelElement = d.pAndB.buttons.cancelBtn;
 	} // end of CreateDialog
@@ -423,6 +426,14 @@ function FitImage() {
 
 		return d.show();
 	}
+}
+
+
+function CS5orGreater() {
+	var numberArray = version.split(".");
+	if ( numberArray[0] >= 12 )
+        return true;
+    return false;
 }
 
 function CheckVersion() {
