@@ -1,6 +1,6 @@
 ﻿// Fit Image+
 // Modified by John Ballantyne
-// May 28, 2013
+// May 29, 2013
 // https://github.com/johnballantyne/FitImagePlus
 //
 // ==============================================
@@ -69,8 +69,10 @@ try {
         gIP.RunDialog();
     }
     else {
+        //Action!
         gIP.InitVariables();
-        ResizeTheImage(sizeInfo.width.value, sizeInfo.height.value, ResampleMethod.BICUBIC);
+        var method = ResamplingMethod(sizeInfo.rmethod);
+        ResizeTheImage(sizeInfo.width.value, sizeInfo.height.value, method);
     }
 
     if (!isCancelled) {
@@ -348,18 +350,7 @@ function FitImage() {
             sizeInfo.rmethod = rValue.toString();
             var inputErr = false;
 
-            var r = null;
-
-            if (rValue.toString() === "Bicubic Sharper")
-                r = ResampleMethod.BICUBICSHARPER;
-            else if (rValue.toString() === "Bicubic Smoother")
-                r = ResampleMethod.BICUBICSMOOTHER;
-            else if (rValue.toString() === "Bilinear")
-                r = ResampleMethod.BILINEAR;
-            else if (rValue.toString() === "Nearest Neighbor")
-                r = ResampleMethod.NEARESTNEIGHBOR;
-            else
-                r = ResampleMethod.BICUBIC;
+            var r = ResamplingMethod(sizeInfo.rmethod);
 
             if ( isNaN( w ) || isNaN( h ) ) {
                 if ( DialogModes.NO != app.playbackDisplayDialogs ) {
@@ -430,6 +421,18 @@ function FitImage() {
     }
 }
 
+function ResamplingMethod(method) {
+    if (method === "Bicubic Sharper")
+        return ResampleMethod.BICUBICSHARPER;
+    else if (method === "Bicubic Smoother")
+        return ResampleMethod.BICUBICSMOOTHER;
+    else if (method === "Bilinear")
+        return ResampleMethod.BILINEAR;
+    else if (method === "Nearest Neighbor")
+        return ResampleMethod.NEARESTNEIGHBOR;
+    else
+        return ResampleMethod.BICUBIC;
+}
 
 function CS5orGreater() {
     var numberArray = version.split(".");
@@ -586,7 +589,7 @@ function SizeInfo() {
     this.height = new UnitValue( 0, "px" );
     this.width = new UnitValue( 0, "px" );
     this.limit = false;
-    this.rmethod = "Test";
+    this.rmethod = null;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
