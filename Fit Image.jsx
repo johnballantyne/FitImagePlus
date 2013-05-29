@@ -62,7 +62,7 @@ try {
 	}
 	else {
 		gIP.InitVariables();
-		ResizeTheImage(sizeInfo.width.value, sizeInfo.height.value);
+		ResizeTheImage(sizeInfo.width.value, sizeInfo.height.value, ResampleMethod.BICUBIC);
 	}
 
 	if (!isCancelled) {
@@ -92,7 +92,7 @@ isCancelled ? 'cancel' : undefined;
 //////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 
-function ResizeTheImage(width, height) {
+function ResizeTheImage(width, height, method) {
 	var oldPref = app.preferences.rulerUnits;
 	var docWidth;
 	var docHeight;
@@ -132,7 +132,7 @@ function ResizeTheImage(width, height) {
 
     // resize the image using a good conversion method while keeping the pixel resolution
     // and the aspect ratio the same
-    app.activeDocument.resizeImage(newWidth, newHeight, resolution, ResampleMethod.BICUBIC);
+    app.activeDocument.resizeImage(newWidth, newHeight, resolution, method);
     app.preferences.rulerUnits = oldPref; // restore old prefs
 	isCancelled = false; // if get here, definitely executed
 	return false; // no error
@@ -169,6 +169,7 @@ function GlobalVariables() {
 	strConstrainWithin = localize( "$$$/JavaScript/FitImage/ConstrainWithin=Constrain Within" );
 	strTextWidth = localize("$$$/JavaScripts/FitImage/Width=&Width:");
 	strTextHeight = localize("$$$/JavaScripts/FitImage/Height=&Height:");
+	strTextMethod = localize("$$$/JavaScripts/FitImage/Method=Method:");
 	strTextPixels = localize("$$$/JavaScripts/FitImage/Pixels=pixels");
 	strButtonOK = localize("$$$/JavaScripts/FitImage/OK=OK");
 	strButtonCancel = localize("$$$/JavaScripts/FitImage/Cancel=Cancel");
@@ -205,6 +206,10 @@ function FitImage() {
 							e: EditText { preferredSize: [70, 20] }, \
 							p: StaticText { text:'" + strTextPixels + "'} \
 						}, \
+ 						r: Group { orientation: 'row', alignment: 'right', \
+						s: StaticText { text:'" + strTextMethod + "' }, \
+						e: DropDownList { properties:{items:['Bicubic','Bicubic Sharper','Bicubic Smoother','Bilinear','Nearest Neighbor']} } \
+  						}, \
 						l: Group { orientation: 'row', alignment: 'left', \
 								c:Checkbox { text: '" + strLimitResize + "', value: false }, \
 						}, \
@@ -290,6 +295,7 @@ function FitImage() {
 			d.pAndB.info.w.e.text = Number(w);
 			d.pAndB.info.h.e.text = Number(h);
 			d.pAndB.info.l.c.value = sizeInfo.limit;
+			d.pAndB.info.r.e.selection = d.pAndB.info.r.e.items[0] ;
 		}
 		return true;
 	}
@@ -328,6 +334,20 @@ function FitImage() {
             var h = Number(hText);
             sizeInfo.limit = Boolean(lValue);
             var inputErr = false;
+			
+			var rValue = d.pAndB.info.r.e.selection;
+			var r = null;
+			
+			if (rValue.toString() === "Bicubic Sharper")
+				r = ResampleMethod.BICUBICSHARPER;
+			else if (rValue.toString() === "Bicubic Smoother")
+				r = ResampleMethod.BICUBICSMOOTHER;
+			else if (rValue.toString() === "Bilinear")
+				r = ResampleMethod.BILINEAR;
+			else if (rValue.toString() === "Nearest Neighbor")
+				r = ResampleMethod.NEARESTNEIGHBOR;
+			else
+				r = ResampleMethod.BICUBIC;
 
             if ( isNaN( w ) || isNaN( h ) ) {
                 if ( DialogModes.NO != app.playbackDisplayDialogs ) {
@@ -377,7 +397,7 @@ function FitImage() {
             if (inputErr == false)  {
                 sizeInfo.width = new UnitValue( w, "px" );
                 sizeInfo.height = new UnitValue( h, "px" );
-                if (ResizeTheImage(w, h)) { // the whole point
+                if (ResizeTheImage(w, h, r)) { // the whole point
                     // error, input or output size too small
                 }
                 d.close(true);
