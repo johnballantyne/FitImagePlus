@@ -175,7 +175,7 @@ function GlobalVariables() {
     gInAlert = false;
 
     // all the strings that need to be localized
-    strTitle = localize( "$$$/JavaScript/FitImage/Title=Fit Image" );
+    strTitle = localize( "$$$/JavaScript/FitImage/Title=Fit Image+" );
     strConstrainWithin = localize( "$$$/JavaScript/FitImage/ConstrainWithin=Constrain Within" );
     strTextWidth = localize("$$$/JavaScripts/FitImage/Width=&Width:");
     strTextHeight = localize("$$$/JavaScripts/FitImage/Height=&Height:");
@@ -186,8 +186,8 @@ function GlobalVariables() {
     strTextSorry = localize("$$$/JavaScripts/FitImage/Sorry=Sorry, Dialog failed");
     strTextInvalidType = localize("$$$/JavaScripts/FitImage/InvalidType=Invalid numeric value");
     strTextInvalidNum = localize("$$$/JavaScripts/FitImage/InvalidNum=A number between 1 and 300000 is required. Closest value inserted.");
-    strTextNeedFile = localize("$$$/JavaScripts/FitImage/NeedFile=You must have a file selected before using Fit Image");
-    strMessage = localize("$$$/JavaScripts/FitImage/Message=Fit Image action settings");
+    strTextNeedFile = localize("$$$/JavaScripts/FitImage/NeedFile=You must have a file selected before using Fit Image+");
+    strMessage = localize("$$$/JavaScripts/FitImage/Message=Fit Image+ action settings");
     strMustUse = localize( "$$$/JavaScripts/ImageProcessor/MustUse=You must use Photoshop CS 2 or later to run this script!" );
     strLimitResize = localize("$$$/JavaScripts/FitImage/Limit=Don^}t Enlarge");
 }
