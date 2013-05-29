@@ -21,13 +21,13 @@
 
 // BEGIN__HARVEST_EXCEPTION_ZSTRING
 <javascriptresource>
-<name>$$$/JavaScripts/FitImage/Name=Fit Image...</name>
+<name>$$$/JavaScripts/FitImage/Name=Fit Image+...</name>
 <menu>automate</menu>
 <enableinfo>true</enableinfo>
 <eventid>3caa3434-cb67-11d1-bc43-0060b0a13dc4</eventid>
 <terminology><![CDATA[<< /Version 1
                          /Events <<
-                          /3caa3434-cb67-11d1-bc43-0060b0a13dc4 [($$$/AdobePlugin/FitImage/Name=Fit Image) /imageReference <<
+                          /3caa3434-cb67-11d1-bc43-0060b0a13dc4 [($$$/AdobePlugin/FitImage/Name=Fit Image+) /imageReference <<
 	                       /width [($$$/AdobePlugin/FitImage/Width=width) /pixelsUnit]
 	                       /height [($$$/AdobePlugin/FitImage/Height=height) /pixelsUnit]
 	                       /limit [($$$/AdobePlugin/FitImage/limit=Don't Enlarge) /boolean]
@@ -631,4 +631,3 @@ function KeyIsTabEnterEscape (event) {
 	return event.keyName == 'Tab' || event.keyName == 'Enter' || event.keyName == 'Escape';
 }
 // End Fit Image.jsx
-
