@@ -1,3 +1,10 @@
+// Fit Image+
+// Modified by John Ballantyne
+// May 28, 2013
+// https://github.com/johnballantyne/FitImagePlus
+//
+// ==============================================
+//
 // c2008 Adobe Systems, Inc. All rights reserved.
 // Written by Ed Rose
 // based on the ADM Fit Image by Charles A. McBrian from 1997
